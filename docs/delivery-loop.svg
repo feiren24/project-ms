@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="330" viewBox="0 0 1220 330" role="img" aria-labelledby="title desc">
+  <title id="title">Project MS 完整交付闭环</title>
+  <desc id="desc">定义里程碑、拆解计划、执行任务、治理风险、提交成果、确认交付。改期先预览，验收未通过则退回执行，必要成果失效则重新核查。</desc>
+  <defs>
+    <marker id="forward" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#2563eb"/></marker>
+    <marker id="feedback" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#64748b"/></marker>
+  </defs>
+  <rect x="1" y="1" width="1218" height="328" rx="18" fill="#f8fafc" stroke="#cbd5e1"/>
+  <g font-family="PingFang SC, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+    <text x="26" y="37" font-size="20" font-weight="700" fill="#0f172a">PROJECT MS · 交付管理闭环</text>
+    <text x="1190" y="37" text-anchor="end" font-size="14" font-weight="600" fill="#475569">DELIVERY FIRST</text>
+    <path d="M194 119H217" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#forward)"/>
+    <path d="M390 119H413" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#forward)"/>
+    <path d="M586 119H609" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#forward)"/>
+    <path d="M782 119H805" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#forward)"/>
+    <path d="M978 119H1001" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#forward)"/>
+    <g transform="translate(26 65)">
+      <rect width="168" height="108" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="14" y="24" font-size="12" font-weight="700" fill="#2563eb">01</text>
+      <text x="84" y="52" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">定义里程碑</text>
+      <text x="84" y="79" text-anchor="middle" font-size="14" fill="#475569">明确验收条件</text>
+    </g>
+    <g transform="translate(222 65)">
+      <rect width="168" height="108" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="14" y="24" font-size="12" font-weight="700" fill="#2563eb">02</text>
+      <text x="84" y="52" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">拆解计划</text>
+      <text x="84" y="79" text-anchor="middle" font-size="14" fill="#475569">任务 · 依赖 · 基线</text>
+    </g>
+    <g transform="translate(418 65)">
+      <rect width="168" height="108" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="14" y="24" font-size="12" font-weight="700" fill="#2563eb">03</text>
+      <text x="84" y="52" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">执行任务</text>
+      <text x="84" y="79" text-anchor="middle" font-size="14" fill="#475569">进度 · 责任 · 阻塞</text>
+    </g>
+    <g transform="translate(614 65)">
+      <rect width="168" height="108" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="14" y="24" font-size="12" font-weight="700" fill="#2563eb">04</text>
+      <text x="84" y="52" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">治理风险</text>
+      <text x="84" y="79" text-anchor="middle" font-size="14" fill="#475569">预警 · 应对 · 复核</text>
+    </g>
+    <g transform="translate(810 65)">
+      <rect width="168" height="108" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="14" y="24" font-size="12" font-weight="700" fill="#2563eb">05</text>
+      <text x="84" y="52" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">提交成果</text>
+      <text x="84" y="79" text-anchor="middle" font-size="14" fill="#475569">证据 · 核查</text>
+    </g>
+    <g transform="translate(1006 65)">
+      <rect width="168" height="108" rx="12" fill="#1d4ed8" stroke="#1d4ed8"/>
+      <text x="14" y="24" font-size="12" font-weight="700" fill="#dbeafe">06</text>
+      <text x="84" y="52" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">确认交付</text>
+      <text x="84" y="79" text-anchor="middle" font-size="14" fill="#dbeafe">里程碑验收</text>
+    </g>
+    <g fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round" marker-end="url(#feedback)">
+      <path d="M473 173V211H306V178"/>
+      <path d="M865 173V260H530V178"/>
+      <path d="M1090 173V211H922V178"/>
+    </g>
+    <g font-size="14" font-weight="600" fill="#334155" text-anchor="middle">
+      <rect x="306" y="219" width="144" height="24" rx="6" fill="#f8fafc"/>
+      <text x="378" y="236">改期先预览</text>
+      <rect x="604" y="268" width="158" height="24" rx="6" fill="#f8fafc"/>
+      <text x="683" y="285">未通过，退回执行</text>
+      <rect x="934" y="219" width="194" height="24" rx="6" fill="#f8fafc"/>
+      <text x="1031" y="236">成果失效，重新核查</text>
+    </g>
+  </g>
+</svg>
