@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  node:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test -- --maxWorkers=2 --testTimeout=30000 --hookTimeout=30000
+
+  compose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install terminal test dependency
+        run: sudo apt-get update && sudo apt-get install -y expect
+      - name: Initialize and start an empty deployment
+        run: |
+          bootstrap() {
+            expect <<'EXPECT'
+          set timeout 180
+          log_user 0
+          spawn docker compose run --build --rm app npm run auth:bootstrap -- --self-hosted /app/data/homepage-demo.sqlite
+          expect {
+            -exact "管理员登录账号（3–48 位字母/数字/._-）：" { send -- "compose-admin\r" }
+            timeout { puts stderr "Missing account prompt"; exit 124 }
+            eof { puts stderr "Container exited before account prompt"; exit 125 }
+          }
+          expect {
+            -exact "管理员姓名：" { send -- "Compose smoke test\r" }
+            timeout { puts stderr "Missing name prompt"; exit 124 }
+          }
+          expect {
+            -exact "管理员密码（12–128 字符，不显示输入）：" { send -- "Compose-smoke-password-2026\r" }
+            timeout { puts stderr "Missing password prompt"; exit 124 }
+          }
+          expect {
+            -exact "再次输入密码：" { send -- "Compose-smoke-password-2026\r" }
+            timeout { puts stderr "Missing confirmation prompt"; exit 124 }
+          }
+          expect {
+            -re {管理员 .* 已初始化} { set result "created" }
+            -exact "数据库已存在，未覆盖" { set result "already exists" }
+            timeout { puts stderr "Unexpected setup result"; exit 124 }
+            eof { puts stderr "Container exited without a setup result"; exit 125 }
+          }
+          expect eof
+          puts $result
+          exit [lindex [wait] 3]
+          EXPECT
+          }
+          docker compose build
+          bootstrap
+          docker compose up -d --wait --wait-timeout 120
+          if retry=$(bootstrap); then
+            echo 'A second initialization unexpectedly succeeded'
+            exit 1
+          else
+            test "$?" -eq 1
+          fi
+          test "$retry" = 'already exists'
+      - name: Verify login, project creation and restart persistence
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          import { setTimeout } from 'node:timers/promises';
+
+          const origin = 'http://127.0.0.1:3100';
+          const request = (path, init) => fetch(origin + path, { ...init, signal: AbortSignal.timeout(5000) });
+          const loginPage = await request('/login');
+          assert.equal(loginPage.status, 200);
+          assert.match(await loginPage.text(), /<div id="app"><\/div>/);
+
+          const login = await request('/api/v1/auth/login', {
+            method: 'POST',
+            headers: { origin, 'content-type': 'application/json' },
+            body: JSON.stringify({ username: 'compose-admin', password: 'Compose-smoke-password-2026' }),
+          });
+          assert.equal(login.status, 200);
+          const cookie = login.headers.get('set-cookie').split(';')[0];
+          const { data: session } = await login.json();
+          const created = await request('/api/v1/projects', {
+            method: 'POST',
+            headers: {
+              origin, cookie, 'content-type': 'application/json',
+              'x-csrf-token': session.csrfToken, 'idempotency-key': crypto.randomUUID(),
+            },
+            body: JSON.stringify({
+              name: 'Compose smoke project', goal: 'Check persistence',
+              start: '2026-10-01', end: '2026-12-31',
+            }),
+          });
+          assert.equal(created.status, 200);
+          const { data: project } = await created.json();
+          execFileSync('docker', ['compose', 'restart', 'app'], { stdio: 'inherit' });
+          for (let attempt = 0; attempt < 60; attempt++) {
+            const ready = await request('/health/ready').catch(() => undefined);
+            if (ready?.ok) break;
+            await setTimeout(1000);
+          }
+          const persisted = await request('/api/v1/projects/' + project.id, { headers: { cookie } });
+          assert.equal(persisted.status, 200);
+          assert.equal((await persisted.json()).data.name, project.name);
+          NODE
+      - name: Show container status
+        if: always()
+        run: docker compose ps -a && docker compose logs --tail=120 app

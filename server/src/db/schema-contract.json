@@ -1,0 +1,511 @@
+{
+  "version": 1,
+  "objects": [
+    {
+      "type": "index",
+      "name": "activity_group_actor",
+      "sql": "CREATE INDEX activity_group_actor ON activity_groups(project_id,actor_id,type,occurred_at DESC)"
+    },
+    {
+      "type": "index",
+      "name": "activity_group_feed",
+      "sql": "CREATE INDEX activity_group_feed ON activity_groups(project_id,occurred_at DESC,first_seq DESC)"
+    },
+    {
+      "type": "index",
+      "name": "activity_items_group",
+      "sql": "CREATE INDEX activity_items_group ON activity_items(group_id,seq)"
+    },
+    {
+      "type": "index",
+      "name": "activity_items_project",
+      "sql": "CREATE INDEX activity_items_project ON activity_items(project_id,seq)"
+    },
+    {
+      "type": "index",
+      "name": "auth_login_attempt_window",
+      "sql": "CREATE INDEX auth_login_attempt_window ON auth_login_attempts(ip_digest,attempted_at)"
+    },
+    {
+      "type": "index",
+      "name": "auth_sessions_user",
+      "sql": "CREATE INDEX auth_sessions_user ON auth_sessions(user_id)"
+    },
+    {
+      "type": "index",
+      "name": "background_jobs_due",
+      "sql": "CREATE INDEX background_jobs_due ON background_jobs(status,due_at)"
+    },
+    {
+      "type": "index",
+      "name": "background_jobs_kind_due",
+      "sql": "CREATE INDEX background_jobs_kind_due ON background_jobs(kind,status,due_at,id)"
+    },
+    {
+      "type": "index",
+      "name": "background_jobs_ready",
+      "sql": "CREATE INDEX background_jobs_ready ON background_jobs(status,due_at,id)"
+    },
+    {
+      "type": "index",
+      "name": "feishu_audit_project",
+      "sql": "CREATE INDEX feishu_audit_project ON feishu_audit(project_id,at)"
+    },
+    {
+      "type": "index",
+      "name": "feishu_deliveries_due",
+      "sql": "CREATE INDEX feishu_deliveries_due ON feishu_deliveries(status,due_at)"
+    },
+    {
+      "type": "index",
+      "name": "feishu_deliveries_list",
+      "sql": "CREATE INDEX feishu_deliveries_list ON feishu_deliveries(project_id,created_at DESC)"
+    },
+    {
+      "type": "index",
+      "name": "feishu_events_pending",
+      "sql": "CREATE INDEX feishu_events_pending ON feishu_events(processed)"
+    },
+    {
+      "type": "index",
+      "name": "homepage_tasks_project_status_due",
+      "sql": "CREATE INDEX homepage_tasks_project_status_due\n          ON homepage_tasks(project_id, status, due)"
+    },
+    {
+      "type": "index",
+      "name": "notifications_recipient",
+      "sql": "CREATE INDEX notifications_recipient ON notifications(project_id,recipient_id,read_at)"
+    },
+    {
+      "type": "index",
+      "name": "plan_baselines_project",
+      "sql": "CREATE INDEX plan_baselines_project ON plan_baselines(project_id, created_at)"
+    },
+    {
+      "type": "index",
+      "name": "plan_history_project",
+      "sql": "CREATE INDEX plan_history_project ON plan_history(project_id, created_at)"
+    },
+    {
+      "type": "index",
+      "name": "plan_previews_project_expiry",
+      "sql": "CREATE INDEX plan_previews_project_expiry ON plan_previews(project_id, expires_at)"
+    },
+    {
+      "type": "index",
+      "name": "project_events_project",
+      "sql": "CREATE INDEX project_events_project ON project_events(project_id,created_at)"
+    },
+    {
+      "type": "index",
+      "name": "risk_records_project",
+      "sql": "CREATE INDEX risk_records_project ON risk_records(project_id)"
+    },
+    {
+      "type": "index",
+      "name": "task_meta_parent",
+      "sql": "CREATE INDEX task_meta_parent ON task_meta(project_id,json_extract(meta_json,'$.parentId'))"
+    },
+    {
+      "type": "index",
+      "name": "task_meta_project",
+      "sql": "CREATE INDEX task_meta_project ON task_meta(project_id)"
+    },
+    {
+      "type": "index",
+      "name": "task_recycle_deleted",
+      "sql": "CREATE INDEX task_recycle_deleted ON task_recycle(project_id,deleted_at)"
+    },
+    {
+      "type": "index",
+      "name": "workstream_events_project",
+      "sql": "CREATE INDEX workstream_events_project ON workstream_events(project_id,created_at)"
+    },
+    {
+      "type": "table",
+      "name": "activity_backfill",
+      "sql": "CREATE TABLE activity_backfill(id INTEGER PRIMARY KEY CHECK(id=1),status TEXT NOT NULL,processed_tasks INTEGER NOT NULL DEFAULT 0,error TEXT,cutoff TEXT NOT NULL,lower_bound TEXT NOT NULL,cursor INTEGER NOT NULL DEFAULT 0,attempts INTEGER NOT NULL DEFAULT 0,retry_at TEXT)"
+    },
+    {
+      "type": "table",
+      "name": "activity_backfill_projects",
+      "sql": "CREATE TABLE activity_backfill_projects(project_id TEXT PRIMARY KEY,processed_tasks INTEGER NOT NULL DEFAULT 0)"
+    },
+    {
+      "type": "table",
+      "name": "activity_config",
+      "sql": "CREATE TABLE activity_config(id INTEGER PRIMARY KEY CHECK(id=1),secret TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "activity_groups",
+      "sql": "CREATE TABLE activity_groups(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,type TEXT NOT NULL,category TEXT NOT NULL,actor_id TEXT,actor_name TEXT NOT NULL,occurred_at TEXT NOT NULL,historical INTEGER NOT NULL,first_seq INTEGER NOT NULL DEFAULT 0,target_json TEXT,summary TEXT)"
+    },
+    {
+      "type": "table",
+      "name": "activity_items",
+      "sql": "CREATE TABLE activity_items(seq INTEGER PRIMARY KEY AUTOINCREMENT,id TEXT NOT NULL UNIQUE,group_id TEXT NOT NULL REFERENCES activity_groups(id),project_id TEXT NOT NULL,source_key TEXT NOT NULL,target_json TEXT,summary TEXT NOT NULL,occurred_at TEXT NOT NULL,historical INTEGER NOT NULL,changes_json TEXT NOT NULL,UNIQUE(project_id,source_key))"
+    },
+    {
+      "type": "table",
+      "name": "activity_versions",
+      "sql": "CREATE TABLE activity_versions(project_id TEXT PRIMARY KEY,version INTEGER NOT NULL DEFAULT 0)"
+    },
+    {
+      "type": "table",
+      "name": "analytics_daily_snapshots",
+      "sql": "CREATE TABLE analytics_daily_snapshots (\n    project_id TEXT NOT NULL REFERENCES homepage_projects(id), date TEXT NOT NULL, captured_at TEXT NOT NULL,\n    data_as_of TEXT NOT NULL, snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), PRIMARY KEY(project_id,date)\n  )"
+    },
+    {
+      "type": "table",
+      "name": "auth_audit",
+      "sql": "CREATE TABLE auth_audit(id TEXT PRIMARY KEY, actor_id TEXT NOT NULL, target_id TEXT NOT NULL, action TEXT NOT NULL, created_at TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "auth_login_attempts",
+      "sql": "CREATE TABLE auth_login_attempts(id INTEGER PRIMARY KEY, account_digest TEXT NOT NULL, ip_digest TEXT NOT NULL, attempted_at INTEGER NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "auth_receipts",
+      "sql": "CREATE TABLE auth_receipts(actor_id TEXT NOT NULL, request_key TEXT NOT NULL, operation TEXT NOT NULL, request_hash TEXT NOT NULL, credential INTEGER NOT NULL, response_json TEXT, PRIMARY KEY(actor_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "auth_sessions",
+      "sql": "CREATE TABLE auth_sessions(token_digest TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES auth_users(id), csrf_token TEXT NOT NULL, expires_at INTEGER NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "auth_users",
+      "sql": "CREATE TABLE auth_users (\n    id TEXT PRIMARY KEY, username TEXT NOT NULL UNIQUE, name TEXT NOT NULL,\n    system_role TEXT NOT NULL CHECK(system_role IN ('admin','user')), active INTEGER NOT NULL CHECK(active IN(0,1)),\n    can_create_projects INTEGER NOT NULL CHECK(can_create_projects IN(0,1)), must_change_password INTEGER NOT NULL CHECK(must_change_password IN(0,1)),\n    version INTEGER NOT NULL DEFAULT 1, password_hash TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "background_job_schedules",
+      "sql": "CREATE TABLE background_job_schedules (\n      project_id TEXT NOT NULL REFERENCES homepage_projects(id), kind TEXT NOT NULL, next_due_at TEXT NOT NULL,\n      PRIMARY KEY(project_id,kind))"
+    },
+    {
+      "type": "table",
+      "name": "background_jobs",
+      "sql": "CREATE TABLE background_jobs (\n    id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES homepage_projects(id), kind TEXT NOT NULL CHECK(kind IN ('notification','risk_evaluate','snapshot','backup','feishu_delivery')),\n    dedupe_key TEXT NOT NULL, payload_json TEXT NOT NULL CHECK(json_valid(payload_json)),\n    status TEXT NOT NULL CHECK(status IN ('pending','running','succeeded','failed','missed')), attempts INTEGER NOT NULL DEFAULT 0,\n    due_at TEXT NOT NULL, created_at TEXT NOT NULL, finished_at TEXT, error TEXT, summary TEXT NOT NULL,\n    lease_token TEXT, lease_until TEXT, manual_retries INTEGER NOT NULL DEFAULT 0, UNIQUE(project_id,kind,dedupe_key))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_audit",
+      "sql": "CREATE TABLE feishu_audit(id TEXT PRIMARY KEY,project_id TEXT NOT NULL REFERENCES homepage_projects(id),at TEXT NOT NULL,actor TEXT NOT NULL,action TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "feishu_bot_rate",
+      "sql": "CREATE TABLE feishu_bot_rate(project_id TEXT NOT NULL,bot_id TEXT NOT NULL,next_send_at TEXT NOT NULL,PRIMARY KEY(project_id,bot_id))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_bots",
+      "sql": "CREATE TABLE feishu_bots(project_id TEXT NOT NULL REFERENCES homepage_projects(id),id TEXT NOT NULL,snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)),credentials_json TEXT NOT NULL,PRIMARY KEY(project_id,id))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_deliveries",
+      "sql": "CREATE TABLE feishu_deliveries(project_id TEXT NOT NULL,id TEXT PRIMARY KEY,job_id TEXT NOT NULL UNIQUE,bot_id TEXT NOT NULL,status TEXT NOT NULL,due_at TEXT NOT NULL,created_at TEXT NOT NULL,snapshot_json TEXT NOT NULL,meta_json TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "feishu_event_state",
+      "sql": "CREATE TABLE feishu_event_state(key TEXT PRIMARY KEY)"
+    },
+    {
+      "type": "table",
+      "name": "feishu_event_targets",
+      "sql": "CREATE TABLE feishu_event_targets(project_id TEXT NOT NULL,event_key TEXT NOT NULL,bot_id TEXT NOT NULL,delivery_id TEXT NOT NULL,PRIMARY KEY(project_id,event_key,bot_id))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_events",
+      "sql": "CREATE TABLE feishu_events(project_id TEXT NOT NULL,event_key TEXT NOT NULL,snapshot_json TEXT NOT NULL,processed INTEGER NOT NULL DEFAULT 0,PRIMARY KEY(project_id,event_key))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_object_states",
+      "sql": "CREATE TABLE feishu_object_states(project_id TEXT NOT NULL,object_key TEXT NOT NULL,snapshot_json TEXT NOT NULL,PRIMARY KEY(project_id,object_key))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_projects",
+      "sql": "CREATE TABLE feishu_projects(project_id TEXT PRIMARY KEY REFERENCES homepage_projects(id),version INTEGER NOT NULL,preferences_json TEXT NOT NULL CHECK(json_valid(preferences_json)))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_receipts",
+      "sql": "CREATE TABLE feishu_receipts(project_id TEXT NOT NULL,request_key TEXT NOT NULL,request_hash TEXT NOT NULL,result_json TEXT NOT NULL,PRIMARY KEY(project_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_rule_activation",
+      "sql": "CREATE TABLE feishu_rule_activation(project_id TEXT NOT NULL,rule_id TEXT NOT NULL,rule_version INTEGER NOT NULL,event_watermark INTEGER NOT NULL,PRIMARY KEY(project_id,rule_id,rule_version))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_rule_schedules",
+      "sql": "CREATE TABLE feishu_rule_schedules(project_id TEXT NOT NULL,rule_id TEXT NOT NULL,rule_version INTEGER NOT NULL,next_nominal_at TEXT NOT NULL,last_nominal_at TEXT,PRIMARY KEY(project_id,rule_id))"
+    },
+    {
+      "type": "table",
+      "name": "feishu_rules",
+      "sql": "CREATE TABLE feishu_rules(project_id TEXT NOT NULL REFERENCES homepage_projects(id),id TEXT NOT NULL,snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)),PRIMARY KEY(project_id,id))"
+    },
+    {
+      "type": "table",
+      "name": "homepage_projects",
+      "sql": "CREATE TABLE homepage_projects (\n          id TEXT PRIMARY KEY,\n          snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json))\n        )"
+    },
+    {
+      "type": "table",
+      "name": "homepage_tasks",
+      "sql": "CREATE TABLE homepage_tasks (\n          id TEXT PRIMARY KEY,\n          project_id TEXT NOT NULL REFERENCES homepage_projects(id),\n          title TEXT NOT NULL,\n          workstream_id TEXT NOT NULL,\n          owner TEXT NOT NULL,\n          initials TEXT NOT NULL,\n          status TEXT NOT NULL CHECK(status IN ('todo', 'in_progress', 'done')),\n          priority TEXT NOT NULL CHECK(priority IN ('P0', 'P1', 'P2')),\n          due TEXT NOT NULL,\n          progress INTEGER NOT NULL CHECK(progress BETWEEN 0 AND 100),\n          blocked INTEGER NOT NULL CHECK(blocked IN (0, 1)),\n          position INTEGER NOT NULL,\n          CHECK((status = 'done' AND progress = 100) OR (status != 'done' AND progress < 100))\n        )"
+    },
+    {
+      "type": "table",
+      "name": "member_capacities",
+      "sql": "CREATE TABLE member_capacities (project_id TEXT NOT NULL, member_id TEXT NOT NULL, snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), PRIMARY KEY(project_id,member_id), FOREIGN KEY(project_id,member_id) REFERENCES project_members(project_id,id))"
+    },
+    {
+      "type": "table",
+      "name": "milestone_receipts",
+      "sql": "CREATE TABLE milestone_receipts(project_id TEXT NOT NULL,actor_id TEXT NOT NULL,request_key TEXT NOT NULL,request_hash TEXT NOT NULL,response_json TEXT NOT NULL,PRIMARY KEY(project_id,actor_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "milestone_records",
+      "sql": "CREATE TABLE milestone_records(project_id TEXT NOT NULL REFERENCES homepage_projects(id),id TEXT NOT NULL,record_json TEXT NOT NULL CHECK(json_valid(record_json)),PRIMARY KEY(project_id,id))"
+    },
+    {
+      "type": "table",
+      "name": "milestone_schema_migrations",
+      "sql": "CREATE TABLE milestone_schema_migrations(version INTEGER PRIMARY KEY,applied_at TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "notification_idempotency",
+      "sql": "CREATE TABLE notification_idempotency(project_id TEXT NOT NULL,request_key TEXT NOT NULL,request_hash TEXT NOT NULL,PRIMARY KEY(project_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "notification_job_retries",
+      "sql": "CREATE TABLE notification_job_retries(project_id TEXT NOT NULL,job_id TEXT NOT NULL,actor_id TEXT NOT NULL,retried_at TEXT NOT NULL,request_key TEXT NOT NULL,PRIMARY KEY(project_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "notification_seen",
+      "sql": "CREATE TABLE notification_seen(project_id TEXT NOT NULL,event_key TEXT NOT NULL,PRIMARY KEY(project_id,event_key))"
+    },
+    {
+      "type": "table",
+      "name": "notification_state",
+      "sql": "CREATE TABLE notification_state(key TEXT PRIMARY KEY,value TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "notifications",
+      "sql": "CREATE TABLE notifications (\n    id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES homepage_projects(id), recipient_id TEXT NOT NULL,\n    event_key TEXT NOT NULL, snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), read_at TEXT,\n    UNIQUE(project_id,event_key,recipient_id))"
+    },
+    {
+      "type": "table",
+      "name": "plan_baselines",
+      "sql": "CREATE TABLE plan_baselines (\n        id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES plan_projects(project_id), snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)),\n        created_at TEXT NOT NULL\n      )"
+    },
+    {
+      "type": "table",
+      "name": "plan_history",
+      "sql": "CREATE TABLE plan_history (\n        id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES plan_projects(project_id), snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), created_at TEXT NOT NULL\n      )"
+    },
+    {
+      "type": "table",
+      "name": "plan_idempotency",
+      "sql": "CREATE TABLE plan_idempotency (\n        project_id TEXT NOT NULL REFERENCES plan_projects(project_id), request_key TEXT NOT NULL, request_hash TEXT NOT NULL,\n        response_json TEXT NOT NULL CHECK(json_valid(response_json)), PRIMARY KEY(project_id, request_key)\n      )"
+    },
+    {
+      "type": "table",
+      "name": "plan_order_projects",
+      "sql": "CREATE TABLE plan_order_projects (\n    project_id TEXT PRIMARY KEY REFERENCES plan_projects(project_id), version INTEGER NOT NULL DEFAULT 1,\n    orders_json TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(orders_json)))"
+    },
+    {
+      "type": "table",
+      "name": "plan_order_receipts",
+      "sql": "CREATE TABLE plan_order_receipts (\n    project_id TEXT NOT NULL REFERENCES plan_projects(project_id), actor_id TEXT NOT NULL, request_key TEXT NOT NULL,\n    request_hash TEXT NOT NULL,response_json TEXT NOT NULL CHECK(json_valid(response_json)),PRIMARY KEY(project_id,actor_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "plan_previews",
+      "sql": "CREATE TABLE plan_previews (\n        id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES plan_projects(project_id), base_version INTEGER NOT NULL,\n        expires_at TEXT NOT NULL, snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), applied INTEGER NOT NULL DEFAULT 0\n      )"
+    },
+    {
+      "type": "table",
+      "name": "plan_projects",
+      "sql": "CREATE TABLE plan_projects (\n        project_id TEXT PRIMARY KEY REFERENCES homepage_projects(id), version INTEGER NOT NULL DEFAULT 1,\n        nodes_json TEXT NOT NULL CHECK(json_valid(nodes_json)), dependencies_json TEXT NOT NULL CHECK(json_valid(dependencies_json)),\n        calendar_json TEXT NOT NULL CHECK(json_valid(calendar_json))\n      )"
+    },
+    {
+      "type": "table",
+      "name": "plan_schema_migrations",
+      "sql": "CREATE TABLE plan_schema_migrations (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "plan_structure_versions",
+      "sql": "CREATE TABLE plan_structure_versions(project_id TEXT PRIMARY KEY,version INTEGER NOT NULL DEFAULT 1)"
+    },
+    {
+      "type": "table",
+      "name": "project_events",
+      "sql": "CREATE TABLE project_events (\n    id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES homepage_projects(id), actor_id TEXT NOT NULL,\n    action TEXT NOT NULL, reason TEXT NOT NULL, snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), created_at TEXT NOT NULL\n  )"
+    },
+    {
+      "type": "table",
+      "name": "project_idempotency",
+      "sql": "CREATE TABLE project_idempotency (\n    actor_id TEXT NOT NULL, scope TEXT NOT NULL, request_key TEXT NOT NULL, request_hash TEXT NOT NULL,\n    response_json TEXT NOT NULL CHECK(json_valid(response_json)), PRIMARY KEY(actor_id,scope,request_key)\n  )"
+    },
+    {
+      "type": "table",
+      "name": "project_members",
+      "sql": "CREATE TABLE project_members (project_id TEXT NOT NULL REFERENCES settings_projects(project_id), id TEXT NOT NULL, name TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('manager','project_admin','member','viewer')), active INTEGER NOT NULL CHECK(active IN (0,1)), removed_at TEXT, PRIMARY KEY(project_id,id), UNIQUE(project_id,name))"
+    },
+    {
+      "type": "table",
+      "name": "project_user_links",
+      "sql": "CREATE TABLE project_user_links(project_id TEXT NOT NULL REFERENCES homepage_projects(id),member_id TEXT NOT NULL,user_id TEXT NOT NULL REFERENCES auth_users(id), PRIMARY KEY(project_id,member_id), UNIQUE(project_id,user_id))"
+    },
+    {
+      "type": "table",
+      "name": "risk_alert_observations",
+      "sql": "CREATE TABLE risk_alert_observations (alert_id TEXT PRIMARY KEY REFERENCES risk_alerts(id) ON DELETE CASCADE, observed_at TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "risk_alerts",
+      "sql": "CREATE TABLE risk_alerts (id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES risk_projects(project_id), rule_key TEXT NOT NULL, object_id TEXT NOT NULL, snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), UNIQUE(project_id,rule_key,object_id))"
+    },
+    {
+      "type": "table",
+      "name": "risk_idempotency",
+      "sql": "CREATE TABLE risk_idempotency (project_id TEXT NOT NULL REFERENCES risk_projects(project_id), request_key TEXT NOT NULL, request_hash TEXT NOT NULL, response_json TEXT NOT NULL CHECK(json_valid(response_json)), PRIMARY KEY(project_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "risk_projects",
+      "sql": "CREATE TABLE risk_projects (project_id TEXT PRIMARY KEY REFERENCES homepage_projects(id), revision INTEGER NOT NULL, rules_json TEXT NOT NULL CHECK(json_valid(rules_json)), last_evaluated_at TEXT, evaluation_error TEXT)"
+    },
+    {
+      "type": "table",
+      "name": "risk_records",
+      "sql": "CREATE TABLE risk_records (id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES risk_projects(project_id), snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)))"
+    },
+    {
+      "type": "table",
+      "name": "settings_events",
+      "sql": "CREATE TABLE settings_events (id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES settings_projects(project_id), snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)))"
+    },
+    {
+      "type": "table",
+      "name": "settings_idempotency",
+      "sql": "CREATE TABLE settings_idempotency (project_id TEXT NOT NULL REFERENCES settings_projects(project_id), request_key TEXT NOT NULL, request_hash TEXT NOT NULL, response_json TEXT NOT NULL CHECK(json_valid(response_json)), PRIMARY KEY(project_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "settings_projects",
+      "sql": "CREATE TABLE settings_projects (project_id TEXT PRIMARY KEY REFERENCES plan_projects(project_id), version INTEGER NOT NULL DEFAULT 1)"
+    },
+    {
+      "type": "table",
+      "name": "system_settings_audit",
+      "sql": "CREATE TABLE system_settings_audit(id TEXT PRIMARY KEY,at TEXT NOT NULL,actor TEXT NOT NULL,action TEXT NOT NULL,result TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "system_settings_config",
+      "sql": "CREATE TABLE system_settings_config(id INTEGER PRIMARY KEY CHECK(id=1),version INTEGER NOT NULL,updated_at TEXT,updated_by TEXT)"
+    },
+    {
+      "type": "table",
+      "name": "system_settings_receipts",
+      "sql": "CREATE TABLE system_settings_receipts(account_id TEXT NOT NULL,request_key TEXT NOT NULL,request_hash TEXT NOT NULL,PRIMARY KEY(account_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "task_idempotency",
+      "sql": "CREATE TABLE task_idempotency (project_id TEXT NOT NULL, request_key TEXT NOT NULL, request_hash TEXT NOT NULL, response_json TEXT NOT NULL, PRIMARY KEY(project_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "task_meta",
+      "sql": "CREATE TABLE task_meta (task_id TEXT PRIMARY KEY, project_id TEXT NOT NULL, meta_json TEXT NOT NULL CHECK(json_valid(meta_json)))"
+    },
+    {
+      "type": "table",
+      "name": "task_recycle",
+      "sql": "CREATE TABLE task_recycle (\n      project_id TEXT NOT NULL REFERENCES homepage_projects(id),task_id TEXT NOT NULL,\n      snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)),deleted_at TEXT,\n      history_json TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(history_json)),PRIMARY KEY(project_id,task_id))"
+    },
+    {
+      "type": "table",
+      "name": "task_recycle_receipts",
+      "sql": "CREATE TABLE task_recycle_receipts (\n      project_id TEXT NOT NULL,actor_id TEXT NOT NULL,request_key TEXT NOT NULL,\n      request_hash TEXT NOT NULL,response_json TEXT NOT NULL,PRIMARY KEY(project_id,actor_id,request_key))"
+    },
+    {
+      "type": "table",
+      "name": "task_recycle_schema_migrations",
+      "sql": "CREATE TABLE task_recycle_schema_migrations(version INTEGER PRIMARY KEY,applied_at TEXT NOT NULL)"
+    },
+    {
+      "type": "table",
+      "name": "workstream_events",
+      "sql": "CREATE TABLE workstream_events (\n      id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES workstream_projects(project_id), workstream_id TEXT NOT NULL,\n      actor_id TEXT NOT NULL, snapshot_json TEXT NOT NULL CHECK(json_valid(snapshot_json)), created_at TEXT NOT NULL\n    )"
+    },
+    {
+      "type": "table",
+      "name": "workstream_idempotency",
+      "sql": "CREATE TABLE workstream_idempotency (\n      project_id TEXT NOT NULL, actor_id TEXT NOT NULL, request_key TEXT NOT NULL, request_hash TEXT NOT NULL,\n      response_json TEXT NOT NULL CHECK(json_valid(response_json)), PRIMARY KEY(project_id,actor_id,request_key)\n    )"
+    },
+    {
+      "type": "table",
+      "name": "workstream_projects",
+      "sql": "CREATE TABLE workstream_projects (\n      project_id TEXT PRIMARY KEY REFERENCES homepage_projects(id), version INTEGER NOT NULL DEFAULT 1\n    )"
+    },
+    {
+      "type": "table",
+      "name": "workstreams",
+      "sql": "CREATE TABLE workstreams (\n      project_id TEXT NOT NULL REFERENCES workstream_projects(project_id), id TEXT NOT NULL, name TEXT NOT NULL,\n      description TEXT NOT NULL, owner_id TEXT, color TEXT NOT NULL CHECK(color IN ('blue','cyan','purple','orange','green','slate')),\n      position INTEGER NOT NULL, active INTEGER NOT NULL CHECK(active IN (0,1)), version INTEGER NOT NULL DEFAULT 1,\n      PRIMARY KEY(project_id,id), UNIQUE(project_id,name), UNIQUE(project_id,position)\n    )"
+    },
+    {
+      "type": "trigger",
+      "name": "plan_baselines_no_delete",
+      "sql": "CREATE TRIGGER plan_baselines_no_delete BEFORE DELETE ON plan_baselines BEGIN SELECT RAISE(ABORT, 'Baseline snapshots are immutable'); END"
+    },
+    {
+      "type": "trigger",
+      "name": "plan_baselines_no_update",
+      "sql": "CREATE TRIGGER plan_baselines_no_update BEFORE UPDATE ON plan_baselines BEGIN SELECT RAISE(ABORT, 'Baseline snapshots are immutable'); END"
+    },
+    {
+      "type": "trigger",
+      "name": "plan_structure_insert",
+      "sql": "CREATE TRIGGER plan_structure_insert AFTER INSERT ON plan_projects BEGIN INSERT OR IGNORE INTO plan_structure_versions(project_id) VALUES(NEW.project_id); END"
+    },
+    {
+      "type": "trigger",
+      "name": "plan_structure_update",
+      "sql": "CREATE TRIGGER plan_structure_update AFTER UPDATE OF nodes_json,dependencies_json,calendar_json ON plan_projects\n      WHEN OLD.dependencies_json != NEW.dependencies_json OR OLD.calendar_json != NEW.calendar_json OR\n        (SELECT json_group_array(json_array(json_extract(value,'$.id'),json_extract(value,'$.parentId'),json_extract(value,'$.kind'),json_extract(value,'$.start'),json_extract(value,'$.end'))) FROM json_each(OLD.nodes_json)) !=\n        (SELECT json_group_array(json_array(json_extract(value,'$.id'),json_extract(value,'$.parentId'),json_extract(value,'$.kind'),json_extract(value,'$.start'),json_extract(value,'$.end'))) FROM json_each(NEW.nodes_json))\n      BEGIN UPDATE plan_structure_versions SET version=version+1 WHERE project_id=NEW.project_id; END"
+    }
+  ],
+  "migrations": {
+    "milestone_schema_migrations": [
+      1
+    ],
+    "plan_schema_migrations": [
+      1
+    ],
+    "task_recycle_schema_migrations": [
+      1
+    ]
+  }
+}

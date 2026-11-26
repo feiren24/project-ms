@@ -1,0 +1,22 @@
+# Only source and locked build inputs may enter the build context.
+**
+!Dockerfile
+!.node-version
+!package.json
+!package-lock.json
+!tsconfig.base.json
+!tsconfig.server.json
+!client/
+!client/**
+!server/
+!server/**
+!shared/
+!shared/**
+**/node_modules
+client/dist
+**/.env*
+**/*.sqlite*
+**/system-secrets
+**/backups
+**/*.pem
+**/*.key

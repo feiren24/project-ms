@@ -1,0 +1,14 @@
+:root {
+  --primary: #2b6cff; --primary-hover: #205be0; --primary-soft: #edf3ff;
+  --bg: #f6f8fc; --surface: #fff; --text: #1b2233; --secondary: #626e83; --muted: #8590a3;
+  --line: #edf0f5; --line-strong: #e2e7ef; --green: #198565; --green-soft: #edf8f3;
+  --orange: #b96516; --orange-soft: #fff6eb; --red: #c94d52; --red-soft: #fff0f0;
+  --violet: #8a6ce0; --violet-soft: #f3efff; --cyan: #35a5c0; --cyan-soft: #eaf8fb;
+  --slate: #7c8aab; --slate-soft: #f0f3f8; --radius: 16px; --shadow: 0 3px 15px rgba(32,52,88,.025);
+  font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px; color: var(--text); background: var(--bg); font-synthesis: none;
+  text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
+}
+*{box-sizing:border-box}body{margin:0;min-width:320px}button,input{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button{color:inherit}button:disabled{cursor:wait;opacity:.55}a{color:inherit;text-decoration:none}button{background:none;border:0}h1,h2,h3,h4,p{margin:0}svg{flex-shrink:0;vertical-align:middle}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #86adff;outline-offset:3px}button{transition:background .16s,color .16s,box-shadow .16s,transform .16s}button:active:not(:disabled){transform:translateY(1px)}::selection{background:#dce8ff}input{min-width:0}small{font-size:11px}b,strong{font-weight:600}button svg{pointer-events:none}
+.blue{color:var(--primary);background:var(--primary-soft)}.cyan{color:var(--cyan);background:var(--cyan-soft)}.violet{color:var(--violet);background:var(--violet-soft)}.orange{color:var(--orange);background:var(--orange-soft)}.green{color:var(--green);background:var(--green-soft)}.red{color:var(--red);background:var(--red-soft)}.slate{color:var(--slate);background:var(--slate-soft)}.red-text{color:var(--red)!important}.orange-text{color:var(--orange)}.muted{color:var(--secondary);font-size:12px}
+.fill-blue,.dot-blue{background:var(--primary)}.fill-cyan,.dot-cyan{background:var(--cyan)}.fill-violet,.dot-violet{background:var(--violet)}.fill-orange,.dot-orange{background:#deaa63}.fill-green,.dot-green{background:#68ab8a}.fill-slate,.dot-slate{background:var(--slate)}

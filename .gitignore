@@ -1,0 +1,30 @@
+node_modules/
+client/dist/
+data/
+test-results/
+playwright-report/
+.env
+*.tsbuildinfo
+tests/performance/results/
+
+# Linux deployment runtime and local configuration
+.runtime/
+.env.linux
+.env.linux.tmp
+logs/
+
+.env.docker
+
+# Local data and credentials
+.DS_Store
+.env.*
+!.env.example
+*.sqlite*
+*.db
+*.db-*
+*.pem
+*.key
+system-secrets/
+backups/
+coverage/
+project-ms-backup*.tar.gz

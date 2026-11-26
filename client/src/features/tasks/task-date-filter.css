@@ -1,0 +1,28 @@
+.task-filter-row .task-date-trigger{min-height:44px;white-space:normal;max-width:100%}
+.task-date-trigger.is-active{color:var(--primary);background:var(--primary-soft);border-color:var(--primary)}
+.task-date-applied{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:4px 20px 12px;font-size:12px;color:var(--secondary)}
+.task-date-chip{display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:100%;padding-left:10px;border-radius:8px;background:var(--primary-soft);color:var(--primary)}
+.task-date-chip>span{overflow-wrap:anywhere}
+.task-date-chip button{flex:0 0 44px;height:44px}
+.task-date-dialog{width:min(500px,calc(100vw - 24px))}
+.task-date-dialog .task-bulk-body{min-height:0}
+.task-date-dialog .task-bulk-body>label:first-child{margin-top:0}
+.task-date-dialog input,.task-date-dialog select{width:100%;min-width:0;min-height:44px;border:1px solid var(--line-strong);border-radius:8px;padding:8px;background:var(--surface);color:var(--text);font:inherit}
+.task-date-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.task-date-fields label{min-width:0}
+.task-date-shortcuts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.task-date-dialog .button{min-height:44px}
+.task-date-shortcuts button[aria-pressed=true]{color:var(--primary);border-color:var(--primary);background:var(--primary-soft)}
+.task-date-dialog .task-date-help{font-size:12px;line-height:1.8;margin-top:16px;color:var(--secondary)}
+.task-date-dialog .task-date-error{color:var(--red);font-size:12px;margin-top:12px}
+.task-date-dialog .task-date-clear{margin-right:auto}
+.task-date-empty-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.task-page .task-date-summary-note{display:block;font-size:10px;line-height:1.5;font-weight:400;color:var(--secondary)}
+@media(max-width:767px){
+  .task-filter-row .task-date-trigger{width:100%}
+  .task-date-applied{padding:4px 12px 12px;font-size:11px}
+  .task-date-fields{grid-template-columns:minmax(0,1fr);gap:0}
+  .task-date-dialog>footer{gap:8px;flex-wrap:wrap;padding:12px}
+  .task-date-dialog>footer .button{padding:8px 10px;font-size:12px}
+  .task-page .task-summary-line>span:first-child{display:block;width:100%;font-size:11px}
+}

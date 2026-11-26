@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    environment:
+      DATABASE_PATH: /app/data/homepage-demo.sqlite
+      PUBLIC_BASE_URL: "${PUBLIC_BASE_URL:-http://127.0.0.1:3100}"
+    ports:
+      - "127.0.0.1:${PROJECT_MS_PORT:-3100}:3100"
+    restart: unless-stopped
+    volumes:
+      - project_ms_data:/app/data
+
+volumes:
+  project_ms_data:

@@ -1,0 +1,107 @@
+/* Complete plan is a workspace: only the rows scroll at normal viewport heights. */
+.plan-workspace.plan-page{padding:16px 20px;max-width:none}
+.plan-workspace.is-gantt-view{height:var(--plan-available-height);min-height:480px;display:flex;flex-direction:column;gap:0}
+.plan-workspace .plan-page-heading{flex:0 0 auto;display:flex;align-items:center;gap:24px;min-height:44px;margin:0}
+.plan-workspace .plan-page-heading h1{font-size:22px;margin:0;white-space:nowrap}
+.plan-workspace .plan-heading-actions{margin-left:auto;padding:0;width:auto;gap:8px}
+.plan-workspace .plan-mode-tabs{display:flex;align-items:center;gap:4px;margin:0;border:0;flex:none;background:var(--surface);border-radius:8px;padding:3px}
+.plan-workspace .plan-mode-tabs button{min-height:38px;padding:0 18px;border:0;border-radius:6px;font-size:13px;color:var(--secondary)}
+.plan-workspace .plan-mode-tabs button.active{background:var(--primary-soft);color:var(--primary);font-weight:600}
+.plan-workspace .plan-summary{flex:0 0 auto;min-height:28px;display:flex;align-items:center;gap:16px;font-size:11px;color:var(--secondary);padding:0;flex-wrap:wrap}
+.plan-workspace .plan-version{font-size:10px;padding:0;background:none;border:0;color:var(--muted)}
+.plan-workspace .plan-about-button{margin-left:auto;font-size:11px;min-height:28px;padding:0}
+.plan-workspace.is-gantt-view .plan-board{display:flex;flex-direction:column;flex:1 0 0;min-height:376px;overflow:hidden}
+.plan-workspace .plan-filter-row{flex:0 0 auto;min-height:48px;padding:4px 16px;gap:8px;flex-wrap:nowrap}
+.plan-workspace .plan-filter-row .plan-search{flex:1;min-width:150px;max-width:300px;height:36px}
+.plan-workspace .plan-filter-field{display:flex;align-items:center;gap:6px;min-width:0;font-size:11px;color:var(--secondary)}
+.plan-workspace .plan-filter-field>span{display:none}
+.plan-workspace .plan-filter-field select{width:100%;max-width:180px;min-width:80px;height:36px;font-size:12px}
+.plan-workspace .plan-filter-baseline{margin-left:auto}
+.plan-workspace .plan-filter-baseline>span{display:inline;white-space:nowrap}
+.plan-workspace .plan-view-toolbar{flex:0 0 auto;min-height:44px;padding:0 16px;gap:8px}
+.plan-workspace .plan-toolbar-left,.plan-workspace .plan-toolbar-right{gap:12px}
+.plan-workspace .plan-view-toolbar .plan-text-button{min-height:40px}
+.plan-workspace .plan-canvas-wrap{flex:1 0 240px;min-height:240px;display:flex;overflow:hidden}
+.plan-workspace .gantt-canvas{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0}
+.plan-workspace .gantt-viewport{flex:1;height:100%;max-height:none;min-height:0;overscroll-behavior:contain}
+.plan-workspace .plan-empty{flex:1 0 240px;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.plan-workspace .plan-board-footer{flex:0 0 auto;min-height:32px;display:flex;align-items:center;justify-content:flex-start;gap:16px;padding:0 16px;border-top:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+.plan-workspace .plan-board-footer .plan-text-button{min-height:32px;font-size:11px;padding:0}
+.plan-workspace .plan-board-footer>button:last-child{margin-left:auto}
+.plan-workspace .plan-check-trigger>span{color:var(--primary)}
+.plan-workspace .plan-check-panel{flex:0 1 220px;min-height:100px;max-height:30%;overflow:auto;border-top:1px solid var(--line-strong);background:var(--bg)}
+.plan-workspace .plan-check-panel>header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);z-index:1}
+.plan-workspace .plan-check-panel h2{font-size:13px;margin:0}
+.plan-workspace .plan-check-panel .plan-attention-body{padding:0 16px 12px}
+.plan-workspace .order-compact{position:relative;top:0;padding:0 16px;flex:0 0 auto;display:grid;grid-template-columns:minmax(0,1fr) auto;box-shadow:none}
+.plan-workspace .order-compact .order-mode-heading{grid-column:1/-1;min-height:48px;flex-wrap:nowrap}
+.plan-workspace .order-compact .order-mode-heading>div:first-child{display:flex;align-items:center;gap:12px;min-width:0}
+.plan-workspace .order-compact .order-mode-heading p{margin:0;font-size:11px}
+.plan-workspace .order-compact .order-selection{grid-column:1;grid-row:2;min-height:44px;padding:0;border:0;flex-wrap:nowrap;gap:8px;min-width:0}
+.plan-workspace .order-compact .order-selection b{display:inline-block;max-width:300px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plan-workspace .order-compact .order-selection small{display:inline;margin-left:8px}
+.plan-workspace .order-compact-scope{grid-column:2;grid-row:2;display:flex;align-items:center;gap:12px;padding-left:16px}
+.plan-workspace .order-compact .order-error,.plan-workspace .order-compact .order-reference{grid-column:1/-1;margin:8px 0;max-height:180px;overflow:auto}
+.plan-workspace.plan-fullscreen{background:var(--bg);overflow:auto;max-height:none}
+.plan-workspace .plan-more-actions{display:flex;flex-direction:column;gap:12px}
+.plan-workspace .plan-mobile-filters{display:flex;flex-direction:column;gap:16px}
+.plan-workspace .plan-mobile-filters .plan-filter-field{flex-direction:column;align-items:stretch;gap:8px;font-size:13px}
+.plan-workspace .plan-mobile-filters .plan-filter-field>span{display:block}
+.plan-workspace .plan-mobile-filters .plan-filter-field select{max-width:none;min-height:44px;width:100%}
+.plan-workspace .plan-mobile-filters .plan-filter-baseline{margin:0}
+.plan-workspace .gantt-legend{border:0;padding:0;gap:16px;line-height:2}
+@media(max-width:1100px) and (min-width:768px){
+ .plan-workspace .plan-filter-row{flex-wrap:wrap}.plan-workspace .plan-filter-row .plan-search{max-width:none}
+ .plan-workspace .order-compact .order-mode-heading p{display:none}
+ .plan-workspace .order-compact .order-selection b{max-width:190px}
+ .plan-workspace .order-compact .order-selection small{display:block;margin:0}
+}
+@media(max-width:767px){
+ .plan-workspace.plan-page{padding:8px 12px 12px}
+ .plan-workspace.is-gantt-view{min-height:600px}
+ .plan-workspace .plan-page-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;min-height:88px;align-content:start}
+ .plan-workspace .plan-page-heading h1{font-size:21px;min-height:44px;display:flex;align-items:center}
+ .plan-workspace .plan-mode-tabs{grid-row:2;grid-column:1/-1;width:100%}
+ .plan-workspace .plan-mode-tabs button{flex:1;min-height:40px}
+ .plan-workspace .plan-more-button{grid-row:1;grid-column:2;min-height:44px;min-width:44px}
+ .plan-workspace .plan-heading-actions{grid-row:1;grid-column:2}
+ .plan-workspace .plan-summary{gap:0 8px;padding:4px 0;font-size:10px;min-height:48px}
+ .plan-workspace .plan-summary>span:first-child{width:100%}
+ .plan-workspace .plan-version{display:none}
+ .plan-workspace .plan-summary .plan-about-button{min-height:24px;font-size:10px}
+ .plan-workspace .plan-filter-row{padding:4px 8px;gap:8px;min-height:52px;flex-wrap:nowrap}
+ .plan-workspace .plan-filter-row .plan-search{min-width:0;width:auto;max-width:none;height:44px}
+ .plan-workspace .plan-filter-trigger{flex-shrink:0;min-height:44px}
+ .plan-workspace .plan-view-toolbar{padding:0 8px;gap:0}
+ .plan-workspace .plan-toolbar-left{gap:8px;width:100%;justify-content:space-between}
+ .plan-workspace .plan-toolbar-left .plan-toolbar-separator{display:none}
+ .plan-workspace .plan-toolbar-left .plan-coverage-tag{display:none}
+ .plan-workspace .plan-toolbar-right{gap:4px;flex-wrap:nowrap}
+ .plan-workspace .plan-view-toolbar .plan-text-button{font-size:11px;min-height:44px}
+ .plan-workspace .plan-mobile-switch{margin:4px 8px;width:calc(100% - 16px);flex:none}
+ .plan-workspace .plan-mobile-list{flex:1 0 240px;min-height:240px;max-height:none;overflow:auto;overscroll-behavior:contain}
+ .plan-workspace .mobile-hidden{display:none}
+ .plan-workspace .plan-board-footer{gap:4px 12px;padding:0 8px;min-height:44px}
+ .plan-workspace .plan-board-footer .plan-text-button{font-size:10px;min-height:44px}
+ .plan-workspace .plan-check-trigger>span{display:none}
+ .plan-workspace .plan-board-footer>button:last-child{margin-left:0}
+ .plan-workspace.is-ordering{padding-bottom:108px}
+ .plan-workspace .order-compact{display:block;padding:8px}
+ .plan-workspace .order-compact .order-mode-heading{min-height:36px}
+ .plan-workspace .order-compact .order-mode-heading>div:first-child{display:block}
+ .plan-workspace .order-compact .order-mode-heading p{margin:4px 0 0;font-size:10px}
+ .plan-workspace .order-compact .order-selection{display:none}
+ .plan-workspace .order-compact-scope{padding:0;min-height:44px;justify-content:space-between}
+ .plan-workspace .plan-order-mobile-item{scroll-margin:0}
+ .plan-workspace.is-ordering .plan-board-footer{display:none}
+}
+
+@media(max-width:767px){
+ .plan-workspace .plan-mobile-switch{order:1}
+ .plan-workspace .plan-canvas-wrap,.plan-workspace .plan-mobile-list,.plan-workspace .plan-empty{order:2}
+ .plan-workspace .plan-mobile-tools{order:3;flex:none;display:flex;justify-content:space-between;gap:4px;padding:0 8px;border-top:1px solid var(--line)}
+ .plan-workspace .plan-mobile-tools .plan-text-button{min-height:44px;font-size:11px}
+ .plan-workspace .plan-board-footer{order:4}
+}
+.plan-workspace .plan-zoom-options{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.plan-workspace .plan-zoom-options button{min-height:44px;min-width:44px}
