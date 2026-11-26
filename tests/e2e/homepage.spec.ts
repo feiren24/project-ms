@@ -284,8 +284,10 @@ for (const width of [1440, 390, 320]) {
 test('preview dev server blocks unrelated private files', async ({ request }) => {
   for (const name of ['.node-version', 'data/homepage-demo.sqlite', '.env']) {
     const path = fileURLToPath(new URL(`../../${name}`, import.meta.url)).replaceAll('\\', '/');
-    const response = await request.get(encodeURI(`/@fs${path.startsWith('/') ? '' : '/'}${path}`));
-    expect([403,404]).toContain(response.status());
+    const response = await request.get(encodeURI(`/@fs${path.startsWith('/') ? '' : '/'}${path}`), {
+      headers: { accept: 'application/octet-stream' },
+    });
+    expect([403, 404], name).toContain(response.status());
   }
 });
 
