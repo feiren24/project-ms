@@ -1,10 +1,14 @@
-# Project MS · GooodWork 项目管理
+# Project MS · 面向交付团队的开源项目管理系统
 
-面向小团队的自托管项目管理系统。用甘特图排期、用看板跟踪任务、用风险矩阵确定处理优先级。支持 Docker Compose 部署，数据保存在本地 SQLite。
+联调推迟了三天，原定的上线日期还能守住吗？在 Project MS 的甘特图上调整任务日期，保存前就能看到哪些后续任务需要顺延、哪些里程碑会受影响。发布计划基线后，团队还能对照原定日期，查清排期偏差。
 
-Self-hosted project management with Gantt planning, task boards, and risk tracking. Contributions are welcome.
+到了交付环节，负责人在任务看板提交成果，指定验收人按约定标准通过或退回。项目经理可以在风险台账跟进应对措施，用风险矩阵判断哪件事要先处理。
 
-[快速开始](#快速开始) · [界面一览](#界面一览) · [技术文档](#技术文档) · [参与贡献](#参与贡献)
+Project MS（GooodWork）支持 Docker Compose 私有化部署，项目数据保存在本地 SQLite，也可按项目配置飞书群通知。
+
+*Self-hosted project management for delivery teams. Preview how schedule changes affect milestones, track deliverable sign-off, and prioritize project risks.*
+
+[快速开始](#快速开始) · [查看界面](#界面一览) · [部署指南](docs/deployment.md) · [参与贡献](#参与贡献)
 
 ![示例项目总览，集中展示进度、待处理事项与近期计划](docs/screenshots/01-overview.webp)
 
@@ -49,19 +53,19 @@ npm run dev
 
 ![完整计划的甘特图，左侧是分组任务，右侧是任务时间条和依赖关系](docs/screenshots/02-plan.webp)
 
-把排期、依赖关系和关键节点放在同一条时间轴上。
+改期前看影响。在甘特图中选中任务并调整日期，预览会列出需要改期的后续任务，以及受影响的里程碑数量。
 
 ### 任务看板
 
 ![按任务状态分列的看板，卡片显示任务名称、负责人和进度](docs/screenshots/03-task-board.webp)
 
-按任务状态梳理工作，查看哪些事项正在推进、由谁负责。
+交付时有验收记录。从看板打开关键交付物，可查看验收标准、提交的成果，以及验收人通过或退回的记录。
 
 ### 风险矩阵
 
 ![风险中心的五乘五矩阵，横纵轴分别表示可能性和影响程度](docs/screenshots/04-risk-matrix.webp)
 
-用影响程度和可能性划分风险，定位应优先处理的事项。
+从高风险项找到负责人。点击矩阵中概率和影响都高的格子，即可查看对应的风险、评分和负责人。
 
 ## 技术文档
 
