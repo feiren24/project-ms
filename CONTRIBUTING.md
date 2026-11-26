@@ -2,6 +2,8 @@
 
 使用 Node 24.13.1，在仓库根目录执行 `npm ci`。按 [快速开始](README.md#快速开始)初始化本机开发库，或使用测试自带的临时数据库。
 
+先读[开发指南](docs/development.md)定位页面、路由和测试，再用[系统架构](docs/architecture.md)核对模块边界。接口调试见[核心 API](docs/api.md)。
+
 - `client/` 包含 Vue 界面和 API 客户端。
 - `server/` 包含 Fastify 路由、业务模块和 SQLite 初始化。
 - `shared/` 包含前后端共同使用的契约和权限规则。

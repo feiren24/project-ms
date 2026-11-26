@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "title": "Project MS 系统架构",
+  "scope": "自托管部署中，Fastify 同源提供 API 与构建后的前端，应用与后台作业共享本地 SQLite。",
+  "view": "system",
+  "theme": "technical",
+  "target_width": 1200,
+  "groups": [
+    { "id": "app-runtime", "title": "Node.js 应用进程", "kind": "group" }
+  ],
+  "nodes": [
+    { "id": "client", "title": "Vue Web 界面", "details": ["Vue Router 路由", "Pinia 会话与界面状态"], "icon": "generic:browser", "role": "entry" },
+    { "id": "fastify", "title": "Fastify API", "details": ["会话与项目权限", "项目、任务、计划、风险"], "icon": "generic:api", "group": "app-runtime", "order": 1 },
+    { "id": "jobs", "title": "后台作业", "details": ["事件通知、统计与备份", "按配置发送飞书通知"], "icon": "generic:queue", "group": "app-runtime", "order": 2 },
+    { "id": "database", "title": "SQLite", "details": ["项目与会话", "任务、计划和作业"], "icon": "generic:database", "role": "external", "order": 1 },
+    { "id": "feishu", "title": "飞书机器人", "details": ["可选外部通知渠道"], "icon": "generic:notification", "role": "external", "order": 2 }
+  ],
+  "edges": [
+    { "id": "client-api", "source": "client", "target": "fastify", "label": "同源 HTTP 请求" },
+    { "id": "api-db", "source": "fastify", "target": "database", "label": "读写业务数据，保存作业" },
+    { "id": "jobs-db", "source": "jobs", "target": "database", "label": "获取作业，更新结果" },
+    { "id": "jobs-feishu", "source": "jobs", "target": "feishu", "label": "按项目配置投递通知" }
+  ]
+}
